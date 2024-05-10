@@ -4,8 +4,6 @@ plugins {
   alias(libs.plugins.android.library)
   alias(libs.plugins.kotlin.multiplatform)
   alias(libs.plugins.compose.multiplatform)
-  alias(libs.plugins.mavenPublish)
-  alias(libs.plugins.paparazzi)
 }
 
 kotlin {
@@ -28,19 +26,26 @@ kotlin {
   sourceSets {
     val commonMain by getting {
       dependencies {
+        implementation(projects.library)
         implementation(compose.ui)
         implementation(compose.foundation)
+        implementation(compose.material3)
+        implementation(compose.materialIconsExtended)
+        @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+        implementation(compose.components.resources)
       }
     }
 
-    val androidUnitTest by getting {
-      dependencies {
-        implementation(libs.junit)
-        implementation(libs.compose.material3)
-        implementation(libs.compose.materialIcons)
-        implementation(libs.androidx.savedstate)
-        implementation(libs.androidx.lifecycle)
-      }
+    val jsWasmMain by creating {
+      dependsOn(commonMain)
+    }
+
+    val jsMain by getting {
+      dependsOn(jsWasmMain)
+    }
+
+    val wasmJsMain by getting {
+      dependsOn(jsWasmMain)
     }
   }
 }
@@ -63,13 +68,5 @@ android {
   }
   lint {
     abortOnError = true
-  }
-}
-
-// Used on CI to prevent publishing of non-snapshot versions.
-tasks.register("throwIfVersionIsNotSnapshot") {
-  val libraryVersion = properties["VERSION_NAME"] as String
-  check(libraryVersion.endsWith("SNAPSHOT")) {
-    "Project isn't using a snapshot version = $libraryVersion"
   }
 }
