@@ -5,16 +5,19 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.*
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import me.saket.swipe.sample.theme.DarkTheme
 import me.saket.swipe.sample.theme.LightTheme
 import me.saket.swipe.sample.theme.MainContent
 
+@OptIn(ExperimentalMaterial3Api::class)
 class SampleActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -34,7 +37,15 @@ class SampleActivity : AppCompatActivity() {
         if (systemInDarkTheme) DarkTheme else LightTheme
       }
 
-      MainContent(colors)
+      MaterialTheme(colors) {
+        Scaffold(
+          topBar = {
+            TopAppBar(title = { Text(stringResource(R.string.app_name)) })
+          }
+        ) { contentPadding ->
+          MainContent(modifier = Modifier.padding(contentPadding))
+        }
+      }
     }
   }
 }

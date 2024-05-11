@@ -2,7 +2,6 @@ package me.saket.swipe.sample.theme
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -11,7 +10,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Archive
 import androidx.compose.material.icons.twotone.ReplyAll
 import androidx.compose.material.icons.twotone.Snooze
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,38 +25,19 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import org.jetbrains.compose.resources.stringResource
-import swipe.sample.shared.generated.resources.Res
-import swipe.sample.shared.generated.resources.app_name
 
 
 @Composable
-private fun defaultColorScheme(): ColorScheme {
-  return if (isSystemInDarkTheme()) DarkTheme else LightTheme
-}
+fun MainContent(modifier: Modifier = Modifier) {
 
-@OptIn(ExperimentalResourceApi::class, ExperimentalMaterial3Api::class)
-@Composable
-fun MainContent(colors: ColorScheme = defaultColorScheme()) {
-
-  MaterialTheme(colors) {
-    Scaffold(
-      topBar = {
-        TopAppBar(title = { Text(stringResource(Res.string.app_name)) })
-      }
-    ) { contentPadding ->
-      LazyColumn(Modifier.padding(contentPadding).fillMaxSize()) {
-        items(20) { index ->
-          SwipeableBoxPreview(
-            Modifier.fillMaxWidth()
-          )
-        }
-      }
+  LazyColumn(modifier.fillMaxSize()) {
+    items(20) { index ->
+      SwipeableBoxPreview(
+        Modifier.fillMaxWidth()
+      )
     }
   }
 }
-
 
 @Composable
 private fun SwipeableBoxPreview(modifier: Modifier = Modifier) {
@@ -95,7 +77,7 @@ private fun SwipeableBoxPreview(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun BatmanIpsumItem(
+fun BatmanIpsumItem(
   modifier: Modifier = Modifier,
   isSnoozed: Boolean
 ) {
